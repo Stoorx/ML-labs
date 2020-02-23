@@ -1,0 +1,3 @@
+rootProject.name = 'ML-labs'
+
+include("lab1")
