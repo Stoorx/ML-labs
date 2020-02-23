@@ -13,7 +13,7 @@ data class DataSet(
         else header.size
 
     fun normalize(): DataSet =
-        lines.fold(List<Double>(width - 1) { lines.first().x[it] }) { acc, dataLine ->
+        lines.fold(List<Double>(lines.first().x.size) { lines.first().x[it] }) { acc, dataLine ->
             acc.zip(dataLine.x) { a, b -> max(abs(a), abs(b)) }
         }.let { n ->
             DataSet(header, lines.map { it.normalize(n) })

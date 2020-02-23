@@ -1,12 +1,7 @@
 package io.stoorx.lab1
 
-class NonparametricRegressor(
-    val dataSet: DataSet,
-    val distance: Distance,
-    val window: Window,
-    val kernel: Kernel
-) {
-    fun predict(query: List<Double>) =
+object NonparametricRegressor {
+    fun predict(dataSet: DataSet, distance: Distance, window: Window, kernel: Kernel, query: List<Double>) =
         (dataSet.takeIf { it.lines.isNotEmpty() } ?: throw Exception("Empty dataset given"))
             .lines
             .map {
@@ -27,6 +22,4 @@ class NonparametricRegressor(
             .mapIndexed { index, d -> index to d }
             .maxBy { it.second }!!
             .first
-
-
 }

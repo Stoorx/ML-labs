@@ -46,32 +46,27 @@ fun main() {
                 }.toList()
             )
         }
-    )
+    ).removeFeature("region-pixel-count")
+        .normalize()
+        .shuffled()
 
-    val predicted = NonparametricRegressor(ds, Distance.Euclidean, VariableWindow(5), Kernel.Gaussian)
-        .predict(
-            listOf(
-                202.0,
-                41.0,
-                9.0,
-                0.0,
-                0.0,
-                0.944448,
-                0.772202,
-                1.11111,
-                1.0256,
-                123.037,
-                111.889,
-                139.778,
-                117.444,
-                -33.4444,
-                50.2222,
-                -16.7778,
-                139.778,
-                0.199347,
-                -2.29992
-            )
-        )
+    val outFile = File("out.csv").bufferedWriter()
 
-    println(predicted)
+    for (dist in Distance.getAll()) {
+        for (k in 1..30) {
+            for (kern in Kernel.getAll()) {
+                val f = LeaveOneOutValidator.getF1Measure(
+                    LeaveOneOutValidator.getConfusionMatrix(
+                        ds,
+                        dist,
+                        VariableWindow(k),
+                        kern
+                    )
+                )
+                val str = "${dist},${k},${kern},${f}"
+                println(str)
+                outFile.appendln(str)
+            }
+        }
+    }
 }
