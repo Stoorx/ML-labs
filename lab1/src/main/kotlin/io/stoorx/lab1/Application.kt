@@ -4,7 +4,6 @@ import java.io.File
 
 fun main() {
 
-
     val lines = File("dataset.csv")
         .readLines()
 
@@ -49,5 +48,30 @@ fun main() {
         }
     )
 
-    println(ds)
+    val predicted = NonparametricRegressor(ds, Distance.Euclidean, VariableWindow(5), Kernel.Gaussian)
+        .predict(
+            listOf(
+                202.0,
+                41.0,
+                9.0,
+                0.0,
+                0.0,
+                0.944448,
+                0.772202,
+                1.11111,
+                1.0256,
+                123.037,
+                111.889,
+                139.778,
+                117.444,
+                -33.4444,
+                50.2222,
+                -16.7778,
+                139.778,
+                0.199347,
+                -2.29992
+            )
+        )
+
+    println(predicted)
 }
