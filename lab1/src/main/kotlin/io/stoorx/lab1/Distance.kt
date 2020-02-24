@@ -32,9 +32,9 @@ interface Distance {
 
     companion object {
         fun getAll(): List<Distance> = listOf(
-            //Manhattan,
-            Euclidean,
-            Chebyshev
+            Manhattan,
+            Euclidean//,
+            //Chebyshev
         )
     }
 }

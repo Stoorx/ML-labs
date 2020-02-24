@@ -50,23 +50,32 @@ fun main() {
         .normalize()
         .shuffled()
 
-    val outFile = File("out.csv").bufferedWriter()
+    val threads = mutableListOf<Thread>()
 
-    for (dist in Distance.getAll()) {
-        for (k in 1..30) {
-            for (kern in Kernel.getAll()) {
-                val f = LeaveOneOutValidator.getF1Measure(
-                    LeaveOneOutValidator.getConfusionMatrix(
-                        ds,
-                        dist,
-                        VariableWindow(k),
-                        kern
-                    )
-                )
-                val str = "${dist},${k},${kern},${f}"
-                println(str)
-                outFile.appendln(str)
-            }
-        }
+    for (k in Kernel.getAll())
+        for (d in Distance.getAll())
+            threads.add(Thread {
+                solve(300, d, ds, k, "${k}-${d}.csv")
+            })
+
+    threads.forEach { it.start() }
+}
+
+
+fun solve(kmax: Int, d: Distance, ds: DataSet, ker: Kernel, outfile: String) {
+    val outFile = File(outfile).bufferedWriter()
+    for (k in 1..kmax) {
+        val f = LeaveOneOutValidator.getF1Measure(
+            LeaveOneOutValidator.getConfusionMatrix(
+                ds,
+                d,
+                VariableWindow(k),
+                ker
+            )
+        )
+        val str = "${d},${ker},${k},${f}"
+        println(str)
+        outFile.appendln(str)
+        outFile.flush()
     }
 }
