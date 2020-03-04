@@ -4,11 +4,17 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class Matrix(val height: Int, val width: Int, init: (row: Int, col: Int) -> Double) {
-    private val data: Array<Array<Double>> = Array(height) { row ->
+    val data: Array<Array<Double>> = Array(height) { row ->
         Array(width) { col -> init(row, col) }
     }
 
     operator fun get(row: Int, col: Int): Double = data[row][col]
+    operator fun set(row: Int, col: Int, value: Double) {
+        data[row][col] = value
+    }
+
+    fun transpose(): Matrix =
+        Matrix(width, height) { row, col -> this[col, row] }
 }
 
 operator fun Matrix.times(other: Matrix) =

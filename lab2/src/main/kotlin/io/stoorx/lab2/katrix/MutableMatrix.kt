@@ -69,3 +69,5 @@ class MutableMatrix : Matrix {
         data.forEachIndexed { index, _ -> data[index] /= scalar }
     }
 }
+
+fun Matrix.toMutableMatrix() = MutableMatrix(packedData, rows)

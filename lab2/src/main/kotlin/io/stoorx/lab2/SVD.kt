@@ -2,8 +2,34 @@ package io.stoorx.lab2
 
 import kotlin.math.pow
 
-fun Matrix.singularValueDecomposition(stopCondition: Double) {
+data class SVD(
+    val U: Matrix,
+    val D: Matrix,
+    val V: Matrix
+)
 
+fun Matrix.singularValueDecomposition(): SVD {
+    val transposed = this.transpose()
+    val ftf = transposed * this
+    val fft = this * transposed
+
+    for (i in ftf.data.indices) {
+        for (j in ftf.data.indices) {
+            if (ftf[i, j] == 0.0)
+                continue
+
+            val q = ftf[j, i] / ftf[i, i]
+            for (k in ftf.data[i].indices) {
+                ftf[j, k] -= ftf[i, k] * q
+            }
+        }
+    }
+
+    return SVD(
+        Matrix(0, 0) { row, col -> 0.0 },
+        Matrix(0, 0) { row, col -> 0.0 },
+        Matrix(0, 0) { row, col -> 0.0 }
+    )
 }
 
 private fun Matrix.squaredError(a: Array<Double>, b: Array<Double>) =
